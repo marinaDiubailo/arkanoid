@@ -40,18 +40,27 @@ export class PlayGround {
   }
 
   drawItem(item) {
-    if (this.context && item) {
-      this.context.drawImage(
-        item.image,
-        item.pos.x,
-        item.pos.y,
-        item.width,
-        item.height,
-      );
-    }
+    this.context.globalAlpha = item.opacity || 1;
+
+    this.context.drawImage(
+      item.image,
+      item.pos.x,
+      item.pos.y,
+      item.width,
+      item.height,
+    );
+    this.context.globalAlpha = 1;
   }
 
   drawBricks(bricks) {
     bricks.forEach((item) => this.drawItem(item));
+  }
+
+  drawGameResult(text) {
+    this.clear();
+    this.context.font = '36px "Stalinist One", sans-serif';
+    this.context.fillStyle = 'rgb(230, 79, 10)';
+    this.context.textAlign = 'center';
+    this.context.fillText(text, canvasSize.width / 2, canvasSize.height / 2);
   }
 }
