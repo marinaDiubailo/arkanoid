@@ -1,12 +1,12 @@
 import { PlayGroundItem } from '../../shared/PlayGroundItem';
-import { BALL_SPEED, ballDimensions } from '../../shared/constants';
+import { ballDimensions } from '../../shared/constants';
 import BallImage from './assets/ball.png';
 
 export class Ball extends PlayGroundItem {
   #speed;
 
   constructor(
-    speed = BALL_SPEED,
+    speed = ballDimensions.SPEED,
     ballSize = ballDimensions.SIZE,
     position = {
       x: ballDimensions.START_X,
@@ -27,6 +27,8 @@ export class Ball extends PlayGroundItem {
   resetPosition() {
     this.pos.x = ballDimensions.START_X;
     this.pos.y = ballDimensions.START_Y;
+    this.#speed.x = ballDimensions.SPEED;
+    this.#speed.y = -ballDimensions.SPEED;
   }
 
   changeYDirection() {
