@@ -17,7 +17,7 @@ export class Paddle extends PlayGroundItem {
     paddleHeight = paddleDimensions.HEIGHT,
     position = {
       x: paddleDimensions.START_X,
-      y: canvasSize.height - paddleDimensions.HEIGHT - 5,
+      y: paddleDimensions.START_Y,
     },
   ) {
     super(paddleWidth, paddleHeight, position, PaddleImage);
@@ -29,9 +29,9 @@ export class Paddle extends PlayGroundItem {
     document.addEventListener('keyup', this.#handleKeyUp);
     document.addEventListener('mousemove', this.#handleMouseMove);
 
-    document.addEventListener('touchstart', this.#handleTouchStart);
+    document.addEventListener('touchstart', this.#handleTouch);
     document.addEventListener('touchend', this.#handleTouchEnd);
-    document.addEventListener('touchmove', this.#handleTouchMove);
+    document.addEventListener('touchmove', this.#handleTouch);
   }
 
   get isMovingLeft() {
@@ -48,34 +48,34 @@ export class Paddle extends PlayGroundItem {
   }
   resetPosition() {
     this.pos.x = paddleDimensions.START_X;
-    this.pos.y = canvasSize.height - paddleDimensions.HEIGHT - 5;
+    this.pos.y = paddleDimensions.START_Y;
   }
 
   #handleKeyUp = (e) => {
-    e.preventDefault();
-    if (e.code === 'ArrowLeft' || e.key === 'ArrowLeft') this.#moveLeft = false;
-    if (e.code === 'ArrowRight' || e.key === 'ArrowRight')
-      this.#moveRight = false;
+    this.#handleKeyChange(e, false);
   };
 
   #handleKeyDown = (e) => {
-    e.preventDefault();
-    if (e.code === 'ArrowLeft' || e.key === 'ArrowLeft') this.#moveLeft = true;
-    if (e.code === 'ArrowRight' || e.key === 'ArrowRight')
-      this.#moveRight = true;
+    this.#handleKeyChange(e, true);
   };
 
-  #handleMouseMove = (e) => {
-    const mouseX = e.clientX - (window.innerWidth - canvasSize.width) / 2;
-
-    if (mouseX > 0 && mouseX < canvasSize.width) {
-      this.pos.x = mouseX - this.width / 2;
+  #handleKeyChange = (e, isKeyDown) => {
+    e.preventDefault();
+    if (e.code === 'ArrowLeft' || e.key === 'ArrowLeft') {
+      this.#moveLeft = isKeyDown;
+    }
+    if (e.code === 'ArrowRight' || e.key === 'ArrowRight') {
+      this.#moveRight = isKeyDown;
     }
   };
 
-  #handleTouchStart = (e) => {
+  #handleMouseMove = (e) => {
+    this.#upgateXPosition(e.clientX);
+  };
+
+  #handleTouch = (e) => {
     const touch = e.touches[0];
-    this.#updatePositionFromTouch(touch.clientX);
+    this.#upgateXPosition(touch.clientX);
   };
 
   #handleTouchEnd = () => {
@@ -83,16 +83,15 @@ export class Paddle extends PlayGroundItem {
     this.#moveRight = false;
   };
 
-  #handleTouchMove = (e) => {
-    const touch = e.touches[0];
-    this.#updatePositionFromTouch(touch.clientX);
-  };
+  #upgateXPosition(clientX) {
+    const adjustedX = clientX - canvasSize.OFFSET_LEFT;
 
-  #updatePositionFromTouch(mouseX) {
-    const adjustedX = mouseX - (window.innerWidth - canvasSize.width) / 2;
-
-    if (adjustedX > 0 && adjustedX < canvasSize.width) {
+    if (adjustedX > 0 && adjustedX < canvasSize.width - this.width / 2) {
       this.pos.x = adjustedX - this.width / 2;
+    }
+
+    if (adjustedX < this.width / 2) {
+      this.pos.x = 0;
     }
   }
 }
