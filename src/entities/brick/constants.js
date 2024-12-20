@@ -13,9 +13,9 @@ export const BRICK_IMAGES = {
 };
 
 export const BRICK_ENERGY = {
-  1: 1, // Red brick
-  2: 1, // Green brick
-  3: 2, // Yellow brick
-  4: 2, // Blue brick
-  5: 3, // Purple brick
+  1: 2,
+  2: 2,
+  3: 1,
+  4: 1,
+  5: 3,
 };
