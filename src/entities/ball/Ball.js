@@ -2,6 +2,13 @@ import { PlayGroundItem } from '../../shared/PlayGroundItem';
 import { ballDimensions } from '../../shared/constants';
 import BallImage from './assets/ball.png';
 
+export const directions = {
+  LEFT: 'left',
+  RIGHT: 'right',
+  CENTER_LEFT: 'center-left',
+  CENTER_RIGHT: 'center-right',
+};
+
 export class Ball extends PlayGroundItem {
   #speed;
 
@@ -15,13 +22,28 @@ export class Ball extends PlayGroundItem {
   ) {
     super(ballSize, ballSize, position, BallImage);
     this.#speed = {
-      x: speed,
+      x: 0,
       y: -speed,
     };
   }
 
   updateXPosition(newXPosition) {
     this.pos.x = newXPosition;
+    this.#speed.x = 0;
+  }
+
+  updateXSpeed(direction) {
+    if (direction === directions.LEFT) {
+      this.#speed.x = -ballDimensions.SPEED;
+    } else if (direction === directions.RIGHT) {
+      this.#speed.x = ballDimensions.SPEED;
+    } else if (direction === directions.CENTER_LEFT) {
+      this.#speed.x = -Math.ceil(ballDimensions.SPEED / 2);
+    } else if (direction === directions.CENTER_RIGHT) {
+      this.#speed.x = Math.ceil(ballDimensions.SPEED / 2);
+    } else {
+      this.#speed.x = 0;
+    }
   }
 
   resetPosition() {
