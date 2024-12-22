@@ -3,6 +3,7 @@ import { PlayGround } from '../../entities/playGround/PlayGround.js';
 import { Paddle } from '../../entities/paddle/Paddle.js';
 import { Ball } from '../../entities/ball/Ball.js';
 import { createBricks } from '../../entities/brick/creteBricks.js';
+import { Brick } from '../../entities/brick/Brick.js';
 
 import { CollisionDetection } from './CollisionDetection.js';
 
@@ -11,6 +12,9 @@ const canvas = document.getElementById('canvas');
 export const GAME_OVER = 'Game Over';
 export const GAME_WON = 'Game Won';
 
+/**
+ * Represents the game logic and state.
+ */
 export class Game {
   #level;
   #isGameStarted = false;
@@ -20,6 +24,11 @@ export class Game {
   #collision = new CollisionDetection();
   #playGround = new PlayGround();
 
+  /**
+   * Creates an instance of the Game.
+   * @param {number} level - The current level of the game.
+   * @param {Function} onGameFinished - Callback function to call when the game finishes.
+   */
   constructor(level, onGameFinished) {
     this.#level = level;
     this.#onGameFinished = onGameFinished;
@@ -38,6 +47,11 @@ export class Game {
     });
   }
 
+  /**
+   * Starts the game, initializing the game state and starting the game loop.
+   * @public
+   * @returns {void}
+   */
   start() {
     this.#playGround.drawScore(this.#score);
     this.#playGround.drawLives(this.#lives);
@@ -48,6 +62,14 @@ export class Game {
     this.#gameLoop(bricks, paddle, ball);
   }
 
+  /**
+   * The main game loop that updates the game state and renders the items.
+   * @param {Brick[]} bricks - The array of brick objects.
+   * @param {Paddle} paddle - The paddle object.
+   * @param {Ball} ball - The ball object.
+   * @private
+   * @returns {void}
+   */
   #gameLoop(bricks, paddle, ball) {
     this.#playGround.clear();
     this.#playGround.drawBricks(bricks);
@@ -98,6 +120,12 @@ export class Game {
     requestAnimationFrame(() => this.#gameLoop(bricks, paddle, ball));
   }
 
+  /**
+   * Ends the game and displays the result.
+   * @param {string} result - The result of the game (GAME_OVER or GAME_WON).
+   * @private
+   * @returns {void}
+   */
   #setGameFinished(result) {
     this.#playGround.drawGameResult(result);
     this.#playGround.clearScreen();

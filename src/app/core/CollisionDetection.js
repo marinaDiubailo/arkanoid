@@ -1,7 +1,19 @@
-import { canvasSize } from '../../shared/constants';
-import { directions } from '../../entities/ball/Ball';
+import { canvasSize } from '../../shared/constants.js';
+import { Ball, directions } from '../../entities/ball/Ball.js';
+import { Brick } from '../../entities/brick/Brick.js';
+import { Paddle } from '../../entities/paddle/Paddle.js';
 
+/**
+ * Handles collision detection for the game.
+ */
 export class CollisionDetection {
+  /**
+   * Checks if the ball is colliding with a brick.
+   * @param {Ball} ball - The ball object, an instance of the Ball class.
+   * @param {Brick} brick - The brick object, an instance of the Brick class..
+   * @private
+   * @returns {boolean} True if there is a collision, false otherwise.
+   */
   #isCollidingBrick(ball, brick) {
     const ballBottom = ball.pos.y + ball.height;
     const ballRight = ball.pos.x + ball.width;
@@ -15,7 +27,7 @@ export class CollisionDetection {
       ballBottom > brick.pos.y;
 
     if (isColliding) {
-      /* Определяем направление удара */
+      /* Determine the direction of impact */
       const overlapLeft = ballRight - brick.pos.x;
       const overlapRight = brickRight - ball.pos.x;
       const overlapTop = ballBottom - brick.pos.y;
@@ -29,9 +41,9 @@ export class CollisionDetection {
       );
 
       if (minOverlap === overlapLeft || minOverlap === overlapRight) {
-        ball.changeXDirection(); /*Удар слева или справа */
+        ball.changeXDirection(); /* Hit from the left or right */
       } else if (minOverlap === overlapTop || minOverlap === overlapBottom) {
-        ball.changeYDirection(); /* Удар сверху или снизу */
+        ball.changeYDirection(); /* Hit from the top or bottom */
       }
 
       return true;
@@ -40,6 +52,13 @@ export class CollisionDetection {
     return false;
   }
 
+  /**
+   * Checks for collisions between the ball and an array of bricks.
+   * @param {Ball} ball - The ball object, an instance of the Ball class.
+   * @param {Brick[]} bricks - An array of brick objects.
+   * @public
+   * @returns {boolean} True if a collision occurred, false otherwise.
+   */
   isCollidingBricks(ball, bricks) {
     let colliding = false;
 
@@ -57,8 +76,15 @@ export class CollisionDetection {
     return colliding;
   }
 
+  /**
+   * Checks for collisions between the ball and the paddle.
+   * @param {Ball} ball - The ball object, an instance of the Ball class.
+   * @param {Paddle} paddle - The paddle object, an instance of the Paddle class.
+   * @public
+   * @returns {void}
+   */
   checkBallCollision(ball, paddle) {
-    /* Мяч сталкивается с платформой */
+    /* The ball collides with the paddle */
     if (
       ball.pos.x + ball.width >= paddle.pos.x &&
       ball.pos.x <= paddle.pos.x + paddle.width &&
@@ -68,39 +94,45 @@ export class CollisionDetection {
       const paddleCenterX = paddle.pos.x + paddle.width / 2;
 
       if (ballCenterX < paddle.pos.x) {
-        // Удар в левую зону
+        // Hit in the left zone
         ball.updateXSpeed(directions.LEFT);
       } else if (ballCenterX < paddleCenterX) {
-        // Удар в левую центральную зону
+        // Hit in the left center zone
         ball.updateXSpeed(directions.CENTER_LEFT);
       } else if (
         ballCenterX > paddleCenterX &&
         ballCenterX < paddle.pos.x + paddle.width
       ) {
-        // Удар в правую центральную зону
+        // Hit in the right center zone
         ball.updateXSpeed(directions.CENTER_RIGHT);
       } else if (ballCenterX >= paddle.pos.x + paddle.width) {
-        // Удар в правую зону
+        // Hit in the right zone
         ball.updateXSpeed(directions.RIGHT);
       } else {
-        // Удар в центральную зону
+        // Hit in the center zone
         ball.updateXSpeed();
       }
 
       ball.changeYDirection();
     }
 
-    /* Мяч сталкивается с боковыми краями поля */
+    /* The ball collides with the side edges of the field */
     if (ball.pos.x > canvasSize.width - ball.width || ball.pos.x < 0) {
       ball.changeXDirection();
     }
 
-    /* Мяч сталкивается с верхним краем поля */
+    /* The ball collides with the top edge of the field */
     if (ball.pos.y < 0) {
       ball.changeYDirection();
     }
   }
 
+  /**
+   * Checks if the ball has collided with the bottom of the canvas.
+   * @param {Ball} ball - The ball object, an instance of the Ball class.
+   * @public
+   * @returns {boolean} True if there is a bottom collision, false otherwise.
+   */
   isBottomCollision(ball) {
     return ball.pos.y > canvasSize.height;
   }
