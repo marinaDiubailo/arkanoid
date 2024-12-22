@@ -1,0 +1,49 @@
+{
+  "extends": ["stylelint-config-standard-scss"],
+  "plugins": ["stylelint-order"],
+  "rules": {
+    "order/order": ["dollar-variables", "declarations", "at-rules", "rules"],
+    "order/properties-order": [
+      {
+        "groupName": "positioning",
+        "emptyLineBefore": "always",
+        "properties": ["position", "top", "right", "bottom", "left", "z-index"]
+      },
+      {
+        "groupName": "box model",
+        "emptyLineBefore": "always",
+        "properties": [
+          "display",
+          "width",
+          "height",
+          "margin",
+          "padding",
+          "border",
+          "border-radius"
+        ]
+      },
+      {
+        "groupName": "typography",
+        "emptyLineBefore": "always",
+        "properties": [
+          "font-family",
+          "font-size",
+          "font-weight",
+          "line-height",
+          "text-align"
+        ]
+      },
+      {
+        "groupName": "background",
+        "emptyLineBefore": "always",
+        "properties": [
+          "background",
+          "background-color",
+          "background-image",
+          "background-position"
+        ]
+      }
+    ],
+    "declaration-empty-line-before": null
+  }
+}
