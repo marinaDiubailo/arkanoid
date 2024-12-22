@@ -6,9 +6,13 @@
     "build": "webpack --env mode=production",
     "start": "webpack serve"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marinaDiubailo/arkanoid.git"
+  },
+  "author": "Marina Diubailo",
   "license": "ISC",
-  "description": "",
+  "description": "Mini arkanoid game",
   "devDependencies": {
     "@babel/core": "^7.26.0",
     "@babel/preset-env": "^7.26.0",
@@ -16,6 +20,7 @@
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^7.1.2",
     "file-loader": "^6.2.0",
+    "gh-pages": "^6.2.0",
     "html-webpack-plugin": "^5.6.3",
     "mini-css-extract-plugin": "^2.9.2",
     "sass": "^1.83.0",
